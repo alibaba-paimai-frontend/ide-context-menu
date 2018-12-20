@@ -2,64 +2,58 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { wInfo } from '../../.storybook/utils';
 
-import { ComponentTree, createSchemaModel } from '../../src/';
+import { ContextMenu, createMenuModel } from '../../src/';
+import { menuNormalGen } from '../helper';
 
 import mdMobx from './simple-mobx.md';
 import mdPlain from './simple-plain.md';
-var base = id => {
-  return {
-    name: 'Row',
-    id: id,
-    props: {
-      isZebra: true,
-      dataSource: []
-    }
-  };
-};
-var schema1 = {
-  ...base('Row_1'),
-  children: [
-    {
-      name: 'Col',
-      id: 'Col_1',
-      children: [base('Row_2'), base('Row_3')]
-    }
-  ]
-};
-const schema = createSchemaModel(schema1);
 
-function clickBtn() {
-  schema.setName('jscon222');
+const menuNormal = menuNormalGen();
+const menuNormalModel = createMenuModel(menuNormal);
+
+function onClickItem(key, keyPath, item) {
+  console.log(`当前点击项的 id: ${key}`);
 }
 
-const plainSchema = schema.toJSON();
-
-const onExpand = function(keys) {
-  console.log(999, keys);
+const clickBtn = menu => () => {
+  const firstItem = menu.children[0];
+  if (firstItem.setName) {
+    firstItem.setName('hello2');
+  } else {
+    firstItem.name = 'hello';
+  }
 };
 
 storiesOf('基础使用', module)
   .addParameters(wInfo(mdMobx))
   .addWithJSX('使用 mobx 对象', () => (
     <div>
-      <ComponentTree
-        schema={schema}
-        selectedId={'Col_1'}
-        expandedIds={['Row_1']}
-        onExpand={onExpand}
+      <ContextMenu
+        visible={true}
+        menu={menuNormalModel}
+        width={200}
+        left={400}
+        top={100}
+        onClickItem={onClickItem}
       />
-      <button onClick={clickBtn}>点击更换 name （会响应）</button>
+      <button onClick={clickBtn(menuNormalModel)}>
+        更换首个 item 的 name （会响应）
+      </button>
     </div>
   ))
   .addParameters(wInfo(mdPlain))
-  .addWithJSX('普通 schema 对象', () => (
+  .addWithJSX('普通 menu 对象', () => (
     <div>
-      <ComponentTree
-        schema={plainSchema}
-        selectedId={'Col_1'}
-        expandedIds={['Row_1']}
-        onExpand={onExpand}
+      <ContextMenu
+        visible={true}
+        menu={menuNormal}
+        width={200}
+        left={400}
+        top={100}
+        onClickItem={onClickItem}
       />
-      <button onClick={clickBtn}>点击更换 name （无效）</button>
+      <button onClick={clickBtn(menuNormal)}>
+        更换首个 item 的 name （不会响应）
+      </button>
     </div>
   ));

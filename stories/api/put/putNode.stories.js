@@ -4,11 +4,10 @@ import { Row, Col, Input, Button, Select } from 'antd';
 import { wInfo } from '../../../.storybook/utils';
 import mdPutNode from './putNode.md';
 
-import { ComponentTreeFactory } from '../../../src';
-import { treegen } from '../../helper';
-// const { ComponentTreeWithStore, client } = ComponentTreeFactory();
+// import { ComponentTreeFactory } from '../../../src';
+// import { treegen } from '../../helper';
 
-const {ComponentTreeWithStore, client} = ComponentTreeFactory();
+// const {ComponentTreeWithStore, client} = ComponentTreeFactory();
 
 const { Option } = Select;
 const styles = {
@@ -104,7 +103,7 @@ storiesOf('API - put', module)
             </Col>
           </Row>
 
-          <ComponentTreeWithStore />
+          {/* <ComponentTreeWithStore /> */}
         </Col>
         <Col span={12}>
           <div id="info" />

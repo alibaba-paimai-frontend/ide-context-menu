@@ -1,5 +1,6 @@
 import { types, SnapshotOrInstance, Instance } from 'mobx-state-tree';
 import { MenuModel, IMenuModel } from './schema/';
+import { createEmptyMenuModel } from './schema/util';
 import { debugInteract } from '../lib/debug';
 
 export const Stores = types
@@ -14,10 +15,6 @@ export const Stores = types
     };
   });
 
-export const stores = Stores.create({
-  menu: {}
-});
-
 export interface IStoresModel extends Instance<typeof Stores> {}
 
 /**
@@ -25,6 +22,6 @@ export interface IStoresModel extends Instance<typeof Stores> {}
  */
 export function StoresFactory(): IStoresModel {
   return Stores.create({
-    menu: {}
+    menu: createEmptyMenuModel()
   });
 }

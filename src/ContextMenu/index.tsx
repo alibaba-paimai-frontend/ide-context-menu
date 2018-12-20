@@ -4,25 +4,97 @@ import { StoresFactory, IStoresModel } from './stores';
 import { AppFactory } from './controller/index';
 import { Menu, Icon } from 'antd';
 import { debugInteract } from '../lib/debug';
-import { IMenuModel, IMenuObject } from './schema';
-import styled from 'styled-components';
+import { IMenuModel, IMenuObject, EMenuItemType } from './schema';
+import { MenuContainer, StyledMenu, StyledMenuItem } from './styles';
 
-interface ContextMenuProps {
+interface MenuProps {
+  /**
+   * 菜单项对象
+   */
+  menu: IMenuModel | IMenuObject;
+
+  /**
+   * 菜单宽度
+   */
+  width?: number;
+
+  /**
+   * 点击菜单条目的回调函数
+   */
+  onClickItem?: (key: string, keyPath: Array<string>, item: any) => void;
+}
+
+export interface ContextMenuProps extends MenuProps {
   /**
    * 是否展现
    */
   visible: boolean;
-  menu: IMenuModel | IMenuObject;
-  onClickItem?: (key: string, keyPath: Array<string>, item: any) => void;
+
+  /**
+   * 菜单距左边距离（fix定位）
+   */
+  left?: number;
+
+  /**
+   * 菜单距顶部距离（fix定位）
+   */
+  top?: number;
 }
 
 interface ContextMenuState {
   // selectedId?: string;
 }
 
-const MenuWrap = styled.div`
-  background: red;
-`;
+@observer
+class MenuSubject extends Component<MenuProps> {
+  constructor(props: ContextMenuProps) {
+    super(props);
+    this.state = {};
+  }
+
+  onClickMenuItem = (event: any) => {
+    const { onClickItem } = this.props;
+    const { item, key, keyPath } = event;
+
+    debugInteract(`[点击菜单]key: ${key}; keyPath: ${keyPath}; item:`, item);
+    onClickItem && onClickItem(key, keyPath, item);
+  };
+
+  render() {
+    const { menu, width } = this.props;
+    const { children = [] } = menu;
+    return (
+      <StyledMenu
+        width={width}
+        className={'menuWrap'}
+        onClick={this.onClickMenuItem}
+        mode="vertical"
+      >
+        {(children as any).slice().map((item: any) => {
+          const isDivider =
+            item.isDivider || item.type === EMenuItemType.SEPARATOR;
+          return isDivider ? (
+            <Menu.Divider key={item.id} />
+          ) : (
+            <StyledMenuItem
+              className={'menuItem'}
+              disabled={item.disabled}
+              key={item.id}
+            >
+              <div className={'content'}>
+                {item.icon ? <Icon type={item.icon} /> : null}
+                <span>{item.name}</span>
+              </div>
+              {item.shortcut ? (
+                <span className={'shortcut'}>{item.shortcut}</span>
+              ) : null}
+            </StyledMenuItem>
+          );
+        })}
+      </StyledMenu>
+    );
+  }
+}
 
 // 推荐使用 decorator 的方式，否则 stories 的导出会缺少 **Prop Types** 的说明
 // 因为 react-docgen-typescript-loader 需要  named export 导出方式
@@ -35,46 +107,19 @@ export class ContextMenu extends Component<ContextMenuProps, ContextMenuState> {
 
     this.root = React.createRef();
   }
-
-  onClickMenuItem = (event: any) => {
-    const { onClickItem } = this.props;
-    const { item, key, keyPath } = event;
-
-    onClickItem && onClickItem(key, keyPath, item);
-  };
-
   render() {
-    const { menu, visible } = this.props;
+    const { menu, visible, width, left, top, onClickItem } = this.props;
     return (
-      <MenuWrap ref={this.root} className="contextMenu">
+      <MenuContainer
+        left={left}
+        top={top}
+        ref={this.root}
+        className="contextMenu"
+      >
         {(visible || null) && (
-          <Menu
-            className={'menuWrap'}
-            onClick={this.onClickMenuItem}
-            mode="vertical"
-          >
-            {[].concat(menu.children || []).map(item => {
-              return item.isDivider ? (
-                <Menu.Divider key={item.id} />
-              ) : (
-                <Menu.Item
-                  className={'menuItem'}
-                  disabled={item.disabled}
-                  key={item.id}
-                >
-                  <div className={'content'}>
-                    {item.icon ? <Icon type={item.icon} /> : null}
-                    <span>{item.name}</span>
-                  </div>
-                  {item.shortcut ? (
-                    <span className={'shortcut'}>{item.shortcut}</span>
-                  ) : null}
-                </Menu.Item>
-              );
-            })}
-          </Menu>
+          <MenuSubject width={width} menu={menu} onClickItem={onClickItem} />
         )}
-      </MenuWrap>
+      </MenuContainer>
     );
   }
 }

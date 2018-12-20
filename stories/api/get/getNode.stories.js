@@ -4,23 +4,22 @@ import { Row, Col, Input, Button } from 'antd';
 import { wInfo } from '../../../.storybook/utils';
 import mdGetNode from './getNode.md';
 
-import { ComponentTreeFactory } from '../../../src';
-import { treegen } from '../../helper';
-// const { ComponentTreeWithStore, client } = ComponentTreeFactory();
+// import { ComponentTreeFactory } from '../../../src';
+// import { treegen } from '../../helper';
 
-const {
-  ComponentTreeWithStore: ComponentTreeWithStore1,
-  client: client1
-} = ComponentTreeFactory();
-const {
-  ComponentTreeWithStore: ComponentTreeWithStore2,
-  client: client2
-} = ComponentTreeFactory();
+// const {
+//   ComponentTreeWithStore: ComponentTreeWithStore1,
+//   client: client1
+// } = ComponentTreeFactory();
+// const {
+//   ComponentTreeWithStore: ComponentTreeWithStore2,
+//   client: client2
+// } = ComponentTreeFactory();
 
-const {
-  ComponentTreeWithStore: ComponentTreeWithStore3,
-  client: client3
-} = ComponentTreeFactory();
+// const {
+//   ComponentTreeWithStore: ComponentTreeWithStore3,
+//   client: client3
+// } = ComponentTreeFactory();
 
 const styles = {
   demoWrap: {
@@ -75,7 +74,7 @@ storiesOf('API - get（schema隔离）', module)
           </Button>
           <Button onClick={createNew(client1)}>创建随机树</Button>
 
-          <ComponentTreeWithStore1 />
+          {/* <ComponentTreeWithStore1 /> */}
         </Col>
         <Col span={12}>
           <div id="info" />
@@ -97,7 +96,7 @@ storiesOf('API - get（schema隔离）', module)
               </>
             }
           />
-          <ComponentTreeWithStore2 />
+          {/* <ComponentTreeWithStore2 /> */}
         </Col>
         <Col span={12}>
           <div id="info" />
@@ -117,7 +116,7 @@ storiesOf('API - get（schema非隔离）', module)
           </Button>
           <Button onClick={createNew(client3)}>创建随机树</Button>
 
-          <ComponentTreeWithStore3 />
+          {/* <ComponentTreeWithStore3 /> */}
         </Col>
         <Col span={12}>
           <div id="info" />
@@ -139,7 +138,7 @@ storiesOf('API - get（schema非隔离）', module)
               </>
             }
           />
-          <ComponentTreeWithStore3 />
+          {/* <ComponentTreeWithStore3 /> */}
         </Col>
         <Col span={12}>
           <div id="info" />

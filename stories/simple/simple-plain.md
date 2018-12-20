@@ -1,53 +1,38 @@
 ## 使用说明
 
 
-也可以直接传递普通 schema 对象：（比如 `.toJSON()` 后的数据格式）：
-
+也可以直接传递普通 menu 对象：：
 
 ```js
-const plainObject = {
-    "id": "Row_1",
-    "screenId": "$Row_30735",
-    "name": "Row",
-    "attrs": "{\"props\":{\"isZebra\":true,\"dataSource\":[]}}",
-    "parentId": "",
-    "functions": {},
-    "children": [
-        {
-            "id": "Col_1",
-            "screenId": "$Col_9b635",
-            "name": "Col",
-            "attrs": "{}",
-            "parentId": "Row_1",
-            "functions": {},
-            "children": [
-                {
-                    "id": "Row_2",
-                    "screenId": "$Row_9e05f",
-                    "name": "Row",
-                    "attrs": "{\"props\":{\"isZebra\":true,\"dataSource\":[]}}",
-                    "parentId": "Col_1",
-                    "functions": {},
-                    "children": []
-                },
-                {
-                    "id": "Row_3",
-                    "screenId": "$Row_ddf5c",
-                    "name": "Row",
-                    "attrs": "{\"props\":{\"isZebra\":true,\"dataSource\":[]}}",
-                    "parentId": "Col_1",
-                    "functions": {},
-                    "children": []
-                }
-            ]
-        }
+const menuNormal = {
+    id: 'component-tree',
+    name: '组件树右键菜单',
+    children: [
+      { id: 'newFile', name: '创建新页面', icon: 'file' },
+      { id: 'copy', name: '复制', icon: 'copy', shortcut: '⌘+C' },
+      { id: 'paste', name: '粘贴', icon: 'switcher', shortcut: '⌘+V' },
+      {
+        id: 'divider',
+        name: '分割线',
+        icon: 'file',
+        type: 'separator'
+      },
+      { id: 'preview', name: '预览', icon: 'eye' },
+      { id: 'delete', name: '删除', icon: 'delete', shortcut: '⌘+Delete' }
     ]
-};
+  };
 ```
 
 传递普通对象数据的话，就没有了 mobx 的自动响应变化的能力了。
 
 ```js
-<ComponentTree schema={plainObject} selectedId={'Col_1'} />
+<ContextMenu
+        visible={true}
+        menu={menuNormal}
+        width={200}
+        left={100}
+        top={100}
+        onClickItem={onClickItem}
+      />
 ```
 

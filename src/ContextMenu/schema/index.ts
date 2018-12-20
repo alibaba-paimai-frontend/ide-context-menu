@@ -1,6 +1,5 @@
 import { types, destroy, IAnyModelType, Instance } from 'mobx-state-tree';
 import { debugModel } from '../../lib/debug';
-import { traverse } from 'ss-tree';
 
 export enum EMenuItemType {
   NORMAL = 'normal',
@@ -33,22 +32,28 @@ export const MenuItemModel = types
   .views(self => {
     return {
       get isDivider() {
-        return this.type === 'sep';
+        return this.type === EMenuItemType.SEPARATOR;
       }
     };
   })
   .actions(self => {
     return {
+      setId(id: string) {
+        self.id = id;
+      },
+      setName(name: string) {
+        self.name = name;
+      },
       setDisabled(state: boolean) {
-        this.disabled = !!state;
+        self.disabled = !!state;
       }
     };
   });
 export interface IMenuItemObject {
   id: string;
   name: string;
-  type: string;
   icon: string;
+  type?: string;
   disabled?: boolean;
   shortcut?: string;
 }
@@ -67,6 +72,7 @@ export const MenuModel = types
     return {
       /**
        * 批量更新指定 ids 的 disabled 状态值
+       * 影响属性：菜单项中的 disabled 属性
        * @param ids  - 想要批量更新的 id 列表
        * @param isDisabled - 期望更新的值
        */
@@ -78,6 +84,12 @@ export const MenuModel = types
             }
           });
         }
+      },
+
+      addMenuItems(items: IMenuItemModel | IMenuItemModel[]) {
+        [].concat(items).forEach((item: IMenuItemModel) => {
+          self.children.push(item);
+        });
       }
     };
   });
