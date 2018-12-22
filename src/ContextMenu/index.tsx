@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { StoresFactory, IStoresModel } from './stores';
+import { StoresFactory, IStoresModel } from './schema/stores';
 import { AppFactory } from './controller/index';
 import { Menu, Icon } from 'antd';
 import { debugInteract } from '../lib/debug';
@@ -134,7 +134,7 @@ export class ContextMenu extends Component<ContextMenuProps, ContextMenuState> {
  */
 export const ContextMenuAddStore = (stores: IStoresModel) =>
   observer(function ContextMenuWithStore(props: ContextMenuProps) {
-    return <ContextMenu menu={stores.menu} {...props} />;
+    return <ContextMenu menu={stores.menu} width={stores.width} visible={stores.visible} left={stores.left} top={stores.top} {...props} />;
   });
 /**
  * 工厂函数，每调用一次就获取一副 MVC

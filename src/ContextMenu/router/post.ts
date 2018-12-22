@@ -1,12 +1,11 @@
 import Router from 'ette-router';
-
+import { createMenuModel } from '../schema/util';
 export const router = new Router();
 
-// 获取所有的节点
-(router as any).post('nodes', '/nodes', function(ctx: any) {
-  const { stores } = ctx;
-  ctx.response.body = {
-    node: stores.resetToEmpty()
-  };
+// 创建新的菜单
+(router as any).post('menu', '/menu', function(ctx: any) {
+  const { stores, request } = ctx;
+  const { menu } = request.data;
+  stores.setMenu(menu);
   ctx.response.status = 200;
 });

@@ -11,6 +11,6 @@
 export * from './ContextMenu/';
 export * from './ContextMenu/schema/';
 export * from './ContextMenu/schema/util';
-export * from './ContextMenu/stores';
+export * from './ContextMenu/schema/stores';
 
 export * from './ContextMenu/controller/';

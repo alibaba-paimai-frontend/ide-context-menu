@@ -4,10 +4,14 @@ import { Row, Col, Input, Button, Select } from 'antd';
 import { wInfo } from '../../../.storybook/utils';
 import mdPutNode from './putNode.md';
 
-// import { ComponentTreeFactory } from '../../../src';
-// import { treegen } from '../../helper';
+import { ContextMenuFactory } from '../../../src';
+import { menuGen } from '../../helper';
 
-// const {ComponentTreeWithStore, client} = ComponentTreeFactory();
+const { ContextMenuWithStore, client } = ContextMenuFactory();
+
+function onClickItem(key, keyPath, item) {
+  console.log(`当前点击项的 id: ${key}`);
+}
 
 const { Option } = Select;
 const styles = {
@@ -20,13 +24,20 @@ const styles = {
 let selectedAttrName = '';
 
 function createNew() {
-  const schema = treegen({});
-  client.post('/nodes', { schema: schema });
+  const menu = menuGen();
+  client.post('/menu', { menu: menu });
+  client.put('/menu', { name: 'visible', value: true }); // 让菜单可见
 }
 
-function updateRootName() {
-  client.put('/nodes/root', { name: 'name', value: 'ggggod' });
-}
+const updateMenuAttr = () => {
+  if (!selectedAttrName) {
+    document.getElementById('info').innerText = '请选择要更改的属性';
+    return;
+  }
+  const value = document.getElementById('targeValue').value;
+
+  client.put('/menu', { name: selectedAttrName, value: value })
+};
 
 function handleChange(value) {
   console.log(`selected ${value}`);
@@ -34,9 +45,9 @@ function handleChange(value) {
 }
 
 function updateById() {
-  const id = document.getElementById('nodeId').value;
+  const id = document.getElementById('itemId').value;
   if (!id) {
-    document.getElementById('info').innerText = '请输入节点 id';
+    document.getElementById('info').innerText = '请输入菜单项 id';
     return;
   }
   if (!selectedAttrName) {
@@ -46,25 +57,22 @@ function updateById() {
 
   const value = document.getElementById('targeValue').value;
 
-  // 更新节点属性，返回更新后的数值
+  // 更新菜单项属性，返回更新后的数值
   client
-    .put(`/nodes/${id}`, { name: selectedAttrName, value: value })
+    .put(`/items/${id}`, { name: selectedAttrName, value: value })
     .then(res => {
       const { status, body } = res;
       if (status === 200) {
         const isSuccess = body.success;
-        client.get(`/nodes/${id}`).then(res => {
+        client.get(`/items/${id}`).then(res => {
           const { status, body } = res;
           if (status === 200) {
-            const node = body.node || {};
+            const item = body.item || {};
             document.getElementById('info').innerText =
               `更新操作：${isSuccess}; \n` +
-              JSON.stringify(node.toJSON ? node.toJSON() : node, null, 4);
+              JSON.stringify(item.toJSON ? item.toJSON() : item, null, 4);
           }
         });
-
-        // 同时选中那个节点
-        client.put(`/selection/${id}`);
       }
     })
     .catch(err => {
@@ -74,13 +82,13 @@ function updateById() {
 }
 storiesOf('API - put', module)
   .addParameters(wInfo(mdPutNode))
-  .addWithJSX('节点：/nodes/:id 更改节点信息', () => {
+  .addWithJSX('/items/:id 更改菜单项信息', () => {
     return (
       <Row style={styles.demoWrap}>
-        <Col span={10} offset={2}>
+        <Col span={10} offset={4}>
           <Row>
             <Col span={4}>
-              <Input placeholder="节点 ID" id="nodeId" />
+              <Input placeholder="菜单项 ID" id="itemId" />
             </Col>
             <Col span={4}>
               <Select
@@ -89,21 +97,27 @@ storiesOf('API - put', module)
                 placeholder="要更改的属性"
               >
                 <Option value="name">name</Option>
-                <Option value="screenId">screenId</Option>
-                <Option value="attrs">attrs</Option>
+                <Option value="type">type</Option>
+                <Option value="disabled">disabled</Option>
+                <Option value="icon">icon</Option>
+                <Option value="shortcut">shortcut</Option>
+                <Option value="visible">visible（菜单）</Option>
+                <Option value="width">width（菜单）</Option>
+                <Option value="left">left（菜单）</Option>
+                <Option value="top">top（菜单）</Option>
               </Select>
             </Col>
             <Col span={6}>
               <Input placeholder="新属性值" id="targeValue" />
             </Col>
             <Col span={10}>
-              <Button onClick={updateById}>更改节点信息</Button>
-              <Button onClick={updateRootName}>更新根节点名字</Button>
+              <Button onClick={updateById}>更改菜单项属性</Button>
+              <Button onClick={updateMenuAttr}>更改整个菜单属性</Button>
               <Button onClick={createNew}>创建随机树</Button>
             </Col>
           </Row>
 
-          {/* <ComponentTreeWithStore /> */}
+          <ContextMenuWithStore onClickItem={onClickItem} />
         </Col>
         <Col span={12}>
           <div id="info" />

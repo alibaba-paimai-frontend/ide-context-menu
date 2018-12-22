@@ -13,6 +13,10 @@ export function isExist(val: any): boolean {
   return typeof val !== 'undefined' && val !== null;
 }
 
+export function isTrue(val: any): boolean {
+  return val === 'true' || val === true;
+}
+
 // from mobx
 export function uniq(arr: any[]) {
   var res: any[] = [];
@@ -49,3 +53,8 @@ export function pick(object: any, paths: string[]) {
   }
   return obj;
 } 
+
+export function capitalize(str: string) {
+  if(!str) return '';
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}

@@ -21,7 +21,7 @@ export const MenuContainer = styled.div`
 `;
 
 export const StyledMenu = styled(Menu)`
-  width: ${(props: IStyledMenu) => props.width || 256}px;
+  width: ${(props: IStyledMenu) => props.width || 200}px;
 `;
 
 export const StyledMenuItem = styled(MenuItem)`

@@ -4,10 +4,14 @@ import { Row, Col, Input, Button } from 'antd';
 import { wInfo } from '../../../.storybook/utils';
 import mdDelNode from './delNode.md';
 
-// import { ComponentTreeFactory } from '../../../src';
-// import { treegen } from '../../helper';
+import { ContextMenuFactory } from '../../../src';
+import { menuGen } from '../../helper';
 
-// const {ComponentTreeWithStore, client} = ComponentTreeFactory();
+const { ContextMenuWithStore, client } = ContextMenuFactory();
+
+function onClickItem(key, keyPath, item) {
+  console.log(`当前点击项的 id: ${key}`);
+}
 
 const styles = {
   demoWrap: {
@@ -17,51 +21,52 @@ const styles = {
 };
 
 function createNew() {
-  const schema = treegen({});
-  client.post('/nodes', { schema: schema });
+  const menu = menuGen();
+  client.post('/menu', { menu: menu });
+  client.put('/menu', { name: 'visible', value: true }); // 让菜单可见
+
 }
 
-function resetSchema() {
-  client.del('/nodes');
+function resetMenu() {
+  client.del('/menu');
 }
 
-function removeNodeById() {
-  const id = document.getElementById('nodeId').value;
+function removeItemById() {
+  const id = document.getElementById('itemId').value;
   if (!id) {
-    document.getElementById('info').innerText = '请输入节点 id';
+    document.getElementById('info').innerText = '请输入 id';
     return;
   }
 
   // 移除指定节点
-  client.del(`/nodes/${id}`).then(res => {
+  client.del(`/items/${id}`).then(res => {
     const { status, body } = res;
     if (status === 200) {
-      const node = body.node || {};
+      const item = body.item || {};
       document.getElementById('info').innerText =
-        `被删除节点信息：\n` + JSON.stringify(node, null, 4);
+        `被删除 item 信息：\n` + JSON.stringify(item, null, 4);
       // 同时选中父节点
-      client.put(`/selection/${id}`);
     }
   });
 }
 storiesOf('API - del', module)
   .addParameters(wInfo(mdDelNode))
-  .addWithJSX('节点：/nodes/:id 移除指定节点', () => {
+  .addWithJSX('/items/:id 移除指定菜单项', () => {
     return (
       <Row style={styles.demoWrap}>
-        <Col span={10} offset={2}>
+        <Col span={10} offset={4}>
           <Row>
             <Col span={4}>
-              <Input placeholder="节点 ID" id="nodeId" />
+              <Input placeholder="菜单项 ID" id="itemId" />
             </Col>
             <Col span={20}>
-              <Button onClick={removeNodeById}>移除节点</Button>
-              <Button onClick={resetSchema}>重置成空树</Button>
+              <Button onClick={removeItemById}>移除节点</Button>
+              <Button onClick={resetMenu}>重置成空树</Button>
               <Button onClick={createNew}>创建随机树</Button>
             </Col>
           </Row>
 
-          {/* <ComponentTreeWithStore /> */}
+          <ContextMenuWithStore onClickItem={onClickItem}/>
         </Col>
         <Col span={12}>
           <div id="info" />

@@ -1,5 +1,7 @@
 import { types, destroy, IAnyModelType, Instance } from 'mobx-state-tree';
 import { debugModel } from '../../lib/debug';
+import { pick, isTrue, isExist, invariant } from '../../lib/util';
+import { updateItem } from './util';
 
 export enum EMenuItemType {
   NORMAL = 'normal',
@@ -44,8 +46,17 @@ export const MenuItemModel = types
       setName(name: string) {
         self.name = name;
       },
+      setType(type: string) {
+        self.type = type;
+      },
       setDisabled(state: boolean) {
-        self.disabled = !!state;
+        self.disabled = isTrue(state);
+      },
+      setIcon(icon: string) {
+        self.icon = icon;
+      },
+      setShortcut(shortcut: string) {
+        self.shortcut = shortcut;
       }
     };
   });
@@ -67,6 +78,38 @@ export const MenuModel = types
     id: types.optional(types.string, ''),
     name: types.optional(types.string, ''),
     children: types.array(types.late((): IAnyModelType => MenuItemModel)) // 在 mst v3 中， `types.array` 默认值就是 `[]`
+  })
+  .views(self => {
+    return {
+      /**
+       * 只返回所有的节点的属性子集合
+       * 依赖：children
+       */
+      allItemsWithFilter(filterArray?: string | string[]) {
+        if (!filterArray) return self.children;
+        const filters = [].concat(filterArray || []);
+        return self.children.map((node: any) => pick(node, filters));
+      },
+      /**
+       * 根据节点 id 找到到子 menuItem 实例
+       */
+      findItem(id: string, filterArray?: string | string[]) {
+        if (!id) return null;
+
+        let targetItem = null;
+        const filters = [].concat(filterArray || []); // 使用逗号隔开
+
+        self.children.some((item: IMenuItemModel) => {
+          if (item.id === id) {
+            targetItem = filters.length ? pick(item, filters) : item;
+            return true;
+          }
+          return false;
+        });
+
+        return targetItem;
+      }
+    };
   })
   .actions(self => {
     return {
@@ -90,6 +133,40 @@ export const MenuModel = types
         [].concat(items).forEach((item: IMenuItemModel) => {
           self.children.push(item);
         });
+      },
+
+      updateItemById(id: string, attrName: string, value: string) {
+        invariant(isExist(id), '菜单项 id 不能为空');
+        invariant(isExist(attrName), '[属性更新] 入参 attrName 不能为空');
+        debugModel(
+          `[menu][更新属性] 将更新 id: ${id} 的属性 ${attrName} 值为 ${value}`
+        );
+
+        const item = self.findItem(id);
+        if (!!item) {
+          return updateItem(item, attrName, value);
+        }
+
+        return false;
+      }
+    };
+  })
+  // 删除操作
+  .actions(self => {
+    return {
+      /**
+       * 删除节点
+       * 影响属性：children
+       */
+      removeItem: (id: string): false | IMenuItemObject => {
+        if (!id) return false;
+        const item = self.findItem(id); // 找到指定的节点
+        if (item) {
+          const itemTobeRemove = (item as any).toJSON();
+          destroy(item as IMenuItemModel); // 从 mst 中移除节点
+          return itemTobeRemove;
+        }
+        return false;
       }
     };
   });
