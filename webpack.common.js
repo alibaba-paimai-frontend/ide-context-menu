@@ -1,5 +1,5 @@
 const path = require('path');
-// const tsImportPluginFactory = require('ts-import-plugin');
+const {getExternal} = require('./webpack-helper')
 
 const commontConfig = {
   entry: {
@@ -9,16 +9,7 @@ const commontConfig = {
   node: {
     fs: 'empty'
   },
-  externals: {
-    'react': 'React',
-    'react-dom': 'ReactDOM',
-    'antd': 'antd',
-    'mobx': 'mobx',
-    'mobx-react': 'mobxReact',
-    'mobx-state-tree': 'mobxStateTree',
-    'ss-tree': 'ssTree',
-    'styled-components': 'styled'
-  },
+  externals: getExternal(true, ['styled-components']),
   module: {
     rules: [
       {

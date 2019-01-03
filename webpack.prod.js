@@ -1,30 +1,45 @@
 const merge = require('webpack-merge');
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const common = require('./webpack.common.js');
 const webpack = require('webpack');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const path = require('path');
+const { getExternal } = require('./webpack-helper');
 
 const targetDir = 'dist';
 
-module.exports = common.map(config => {
+const defaultConfig = common.map(config => {
   return merge(config, {
+    entry: './src/index.tsx',
+    output: {
+      filename: 'index.js',
+      path: path.resolve(__dirname, 'dist')
+    },
     mode: 'production',
     devtool: 'source-map',
+    optimization: {
+      minimizer: [new TerserPlugin()]
+    },
     plugins: [
-      new HtmlWebpackPlugin({
-        title: 'demo 页面',
-        excludeChunks: ['index', 'index.js'],
-        // Load a custom template (lodash by default)
-        template: 'demo/index.html'
-      }),
       new CleanWebpackPlugin(targetDir),
-      new UglifyJSPlugin({
-        sourceMap: true
-      }),
       new webpack.DefinePlugin({
         'process.env.NODE_ENV': JSON.stringify('production')
       })
     ]
   });
 });
+
+// 我们输出三份配置
+module.exports = defaultConfig.concat([
+  merge(defaultConfig[0], {
+    entry: './src/index.tsx',
+    externals: getExternal(false, ['styled-components']),
+    output: {
+      filename: 'index.umd.js',
+      path: path.resolve(__dirname, 'dist'),
+      libraryTarget: 'umd',
+      library: 'ideContextMenu',
+      umdNamedDefine: true
+    }
+  })
+]);
