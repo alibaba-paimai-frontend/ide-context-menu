@@ -7,7 +7,14 @@ import { debugInteract } from '../lib/debug';
 import { IMenuModel, IMenuObject, EMenuItemType } from './schema';
 import { MenuContainer, StyledMenu, StyledMenuItem } from './styles';
 
-interface MenuProps {
+export interface IContextMenuEvent {
+  /**
+   * 点击菜单条目的回调函数
+   */
+  onClickItem?: (key: string, keyPath: Array<string>, item: any) => void;
+}
+
+interface MenuProps extends IContextMenuEvent {
   /**
    * 菜单项对象
    */
@@ -17,14 +24,9 @@ interface MenuProps {
    * 菜单宽度
    */
   width?: number;
-
-  /**
-   * 点击菜单条目的回调函数
-   */
-  onClickItem?: (key: string, keyPath: Array<string>, item: any) => void;
 }
 
-export interface ContextMenuProps extends MenuProps {
+export interface IContextMenuProps extends MenuProps {
   /**
    * 是否展现
    */
@@ -41,13 +43,9 @@ export interface ContextMenuProps extends MenuProps {
   top?: number;
 }
 
-interface ContextMenuState {
-  // selectedId?: string;
-}
-
 @observer
 class MenuSubject extends Component<MenuProps> {
-  constructor(props: ContextMenuProps) {
+  constructor(props: IContextMenuProps) {
     super(props);
     this.state = {};
   }
@@ -99,9 +97,9 @@ class MenuSubject extends Component<MenuProps> {
 // 推荐使用 decorator 的方式，否则 stories 的导出会缺少 **Prop Types** 的说明
 // 因为 react-docgen-typescript-loader 需要  named export 导出方式
 @observer
-export class ContextMenu extends Component<ContextMenuProps, ContextMenuState> {
+export class ContextMenu extends Component<IContextMenuProps> {
   private root: React.RefObject<HTMLDivElement>;
-  constructor(props: ContextMenuProps) {
+  constructor(props: IContextMenuProps) {
     super(props);
     this.state = {};
 
@@ -133,8 +131,17 @@ export class ContextMenu extends Component<ContextMenuProps, ContextMenuState> {
  * @param stores - store 模型实例
  */
 export const ContextMenuAddStore = (stores: IStoresModel) =>
-  observer(function ContextMenuWithStore(props: ContextMenuProps) {
-    return <ContextMenu menu={stores.menu} width={stores.width} visible={stores.visible} left={stores.left} top={stores.top} {...props} />;
+  observer(function ContextMenuWithStore(props: IContextMenuProps) {
+    return (
+      <ContextMenu
+        menu={stores.menu}
+        width={stores.width}
+        visible={stores.visible}
+        left={stores.left}
+        top={stores.top}
+        {...props}
+      />
+    );
   });
 /**
  * 工厂函数，每调用一次就获取一副 MVC

@@ -4,12 +4,17 @@ import { createEmptyMenuModel, updateMenuContainer } from './util';
 import { debugInteract } from '../../lib/debug';
 import { isExist, invariant, isTrue } from '../../lib/util';
 
+export const STORE_ID_PREIX = 'scm_';  // store context menu
 interface IPosition {
   x?: number;
   y?: number;
 }
 export const Stores = types
   .model('StoresModel', {
+    id: types.refinement(
+      types.identifier,
+      identifier => identifier.indexOf(STORE_ID_PREIX) === 0
+    ),
     menu: MenuModel,
     visible: false,
     width: types.optional(types.number, 200),
@@ -74,7 +79,7 @@ export const Stores = types
         const menuToRemoved = (self.menu as any).toJSON();
         self.setMenu(createEmptyMenuModel());
         self.setVisible(false);
-        self.setPostion({x:0, y:0});
+        self.setPostion({ x: 0, y: 0 });
         return menuToRemoved;
       }
     };
@@ -82,11 +87,13 @@ export const Stores = types
 
 export interface IStoresModel extends Instance<typeof Stores> {}
 
+let autoId = 1;
 /**
  * 工厂方法，用于创建 stores
  */
 export function StoresFactory(): IStoresModel {
   return Stores.create({
+    id: `${STORE_ID_PREIX}${autoId++}`,
     menu: createEmptyMenuModel(),
     visible: false,
     left: 0,

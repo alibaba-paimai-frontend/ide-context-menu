@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Row, Col, Input, Button, Select } from 'antd';
 import { wInfo } from '../../../.storybook/utils';
-import mdPutNode from './putNode.md';
+import mdPutNode from './put.md';
 
 import { ContextMenuFactory } from '../../../src';
 import { menuGen } from '../../helper';

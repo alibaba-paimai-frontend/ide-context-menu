@@ -1,4 +1,5 @@
 import Router from 'ette-router';
+import { areaCache } from './helper';
 export const router = new Router();
 
 // 移除整棵树
@@ -18,6 +19,15 @@ export const router = new Router();
   const result = stores.menu.removeItem(id);
   ctx.response.body = {
     item: result
+  };
+  ctx.response.status = 200;
+});
+
+// 删除等待关闭区域
+(router as any).del('menu', '/menu/bufferAreas', function(ctx: any) {
+  const { stores } = ctx;
+  ctx.response.body = {
+    result: areaCache.delete(stores.id)
   };
   ctx.response.status = 200;
 });
