@@ -20,11 +20,11 @@ const COMMON_LIBS = [
 ];
 
 module.exports = {
-  getExternal: function(isDev, extraLibs = []) {
+  getExternal: function(extraLibs = [], disableMap = false) {
     const libs = COMMON_LIBS.concat(extraLibs);
     const externals = {};
     libs.forEach(lib => {
-        externals[lib] = isDev ? (LIB_MAP[lib] || lib) : lib;
+      externals[lib] = disableMap ? lib : LIB_MAP[lib] || lib;
     });
     return externals;
   }

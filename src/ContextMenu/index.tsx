@@ -14,7 +14,7 @@ export interface IContextMenuEvent {
   onClickItem?: (key: string, keyPath: Array<string>, item: any) => void;
 }
 
-interface MenuProps extends IContextMenuEvent {
+interface IMenuProps extends IContextMenuEvent {
   /**
    * 菜单项对象
    */
@@ -26,7 +26,7 @@ interface MenuProps extends IContextMenuEvent {
   width?: number;
 }
 
-export interface IContextMenuProps extends MenuProps {
+export interface IContextMenuProps extends IMenuProps {
   /**
    * 是否展现
    */
@@ -44,7 +44,7 @@ export interface IContextMenuProps extends MenuProps {
 }
 
 @observer
-class MenuSubject extends Component<MenuProps> {
+class MenuSubject extends Component<IMenuProps> {
   constructor(props: IContextMenuProps) {
     super(props);
     this.state = {};
