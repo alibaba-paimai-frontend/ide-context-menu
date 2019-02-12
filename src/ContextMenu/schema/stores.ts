@@ -10,9 +10,6 @@ interface IPosition {
   y?: number;
 }
 
-// 枚举被 store 控制的 model 的列表
-export const STORES_CONTROLLED_MODELS: string[] = ['menu'];
-
 
 // 获取被 store 控制的 key 的列表
 export type TStoresControlledKeys =

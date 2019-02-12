@@ -6,7 +6,7 @@ import {
   StoresFactory,
   IStoresModel,
   TStoresControlledKeys,
-  STORES_CONTROLLED_KEYS,
+  STORES_CONTROLLED_KEYS
 } from './schema/stores';
 import { AppFactory } from './controller/index';
 import { debugInteract } from '../lib/debug';
@@ -52,6 +52,7 @@ export interface IContextMenuProps extends IMenuProps {
 
 @observer
 class MenuSubject extends Component<IMenuProps> {
+  static displayName = 'MenuSubject';
   constructor(props: IContextMenuProps) {
     super(props);
     this.state = {};
@@ -105,6 +106,7 @@ class MenuSubject extends Component<IMenuProps> {
 // 因为 react-docgen-typescript-loader 需要  named export 导出方式
 @observer
 export class ContextMenu extends Component<IContextMenuProps> {
+  static displayName = 'ContextMenu';
   private root: React.RefObject<HTMLDivElement>;
   constructor(props: IContextMenuProps) {
     super(props);
@@ -138,14 +140,19 @@ type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
  * 科里化创建 ContextMenuWithStore 组件
  * @param stores - store 模型实例
  */
-export const ContextMenuAddStore = (stores: IStoresModel) =>
-  observer(function ContextMenuWithStore(
+export const ContextMenuAddStore = (stores: IStoresModel) => {
+  function ContextMenuWithStore(
     props: Omit<IContextMenuProps, TStoresControlledKeys>
   ) {
     const { onClickItem, ...otherProps } = props;
     const controlledProps = pick(stores, STORES_CONTROLLED_KEYS);
     return <ContextMenu {...controlledProps} {...otherProps} />;
-  });
+  }
+  ContextMenuWithStore.displayName = 'ContextMenuWithStore';
+
+  return observer(ContextMenuWithStore);
+};
+
 /**
  * 工厂函数，每调用一次就获取一副 MVC
  * 用于隔离不同的 ContextMenuWithStore 的上下文
