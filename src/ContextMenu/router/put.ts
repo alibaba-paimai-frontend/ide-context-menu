@@ -1,11 +1,13 @@
 import Router from 'ette-router';
 import { getAdjustedPostion } from '../../lib/util';
+import { IContext } from './helper';
+
 export const router = new Router();
 
 const HEIGHT_MENUITEM = 48; // 每个菜单项的高度，如果样式修改了的话，请及时更改
 
 // 更新根节点的属性
-(router as any).put('items', '/items', function(ctx: any) {
+router.put('items', '/items', function(ctx: IContext) {
   const { stores } = ctx;
   ctx.response.body = {
     node: stores.resetToEmpty()
@@ -14,7 +16,7 @@ const HEIGHT_MENUITEM = 48; // 每个菜单项的高度，如果样式修改了�
 });
 
 // 更新指定节点的属性
-(router as any).put('items', '/items/:id', function(ctx: any) {
+router.put('items', '/items/:id', function(ctx: IContext) {
   const { stores, request } = ctx;
   const { name, value } = request.data;
   const { id } = ctx.params;
@@ -29,7 +31,7 @@ const HEIGHT_MENUITEM = 48; // 每个菜单项的高度，如果样式修改了�
 });
 
 // 更新菜单项属性
-(router as any).put('menu', '/menu', function(ctx: any) {
+router.put('menu', '/menu', function(ctx: IContext) {
   const { stores, request } = ctx;
   const { name, value } = request.data;
 
@@ -43,7 +45,7 @@ const HEIGHT_MENUITEM = 48; // 每个菜单项的高度，如果样式修改了�
 });
 
 // 更新菜单的位置
-(router as any).put('menu', '/menu/position', async function(ctx: any) {
+router.put('menu', '/menu/position', async function(ctx: IContext) {
   const { stores, request } = ctx;
   const { query, data } = request;
   const { x, y } = data;

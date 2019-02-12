@@ -1,4 +1,10 @@
-import { types, destroy, IAnyModelType, Instance } from 'mobx-state-tree';
+import {
+  types,
+  destroy,
+  IAnyModelType,
+  Instance,
+  SnapshotOrInstance
+} from 'mobx-state-tree';
 import { debugModel } from '../../lib/debug';
 import { pick, isTrue, isExist, invariant } from '../../lib/util';
 import { updateItem } from './util';
@@ -69,6 +75,13 @@ export interface IMenuItemObject {
   shortcut?: string;
 }
 export interface IMenuItemModel extends Instance<typeof MenuItemModel> {}
+
+// 获取被 store 控制的 model key 的列表
+export type TMenuControlledKeys =
+  | keyof SnapshotOrInstance<typeof MenuModel>;
+
+// 定义被 store 控制的 key 的列表，没法借用 ts 的能力动态从 TMenuControlledKeys 中获取
+export const CONTROLLED_KEYS: string[] = ['id', 'name', 'children'];
 
 /**
  * 菜单项的模型，包含普通的菜单和右键菜单

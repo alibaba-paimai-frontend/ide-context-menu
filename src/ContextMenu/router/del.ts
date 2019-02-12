@@ -1,9 +1,9 @@
 import Router from 'ette-router';
-import { areaCache } from './helper';
+import { areaCache, IContext } from './helper';
 export const router = new Router();
 
 // 移除整棵树
-(router as any).del('menu', '/menu', function(ctx: any) {
+router.del('menu', '/menu', function(ctx: IContext) {
   const { stores } = ctx;
   ctx.response.body = {
     menu: stores.resetToEmpty()
@@ -12,7 +12,7 @@ export const router = new Router();
 });
 
 // 移除指定节点
-(router as any).del('items', '/items/:id', function(ctx: any) {
+router.del('items', '/items/:id', function(ctx: IContext) {
   const { stores, params } = ctx;
   const { id } = params;
   // 这里有个特殊情况，如果 id 是根节点的 id，需要调用 `resetToEmpty` 方法
@@ -24,7 +24,7 @@ export const router = new Router();
 });
 
 // 删除等待关闭区域
-(router as any).del('menu', '/menu/bufferAreas', function(ctx: any) {
+router.del('menu', '/menu/bufferAreas', function(ctx: IContext) {
   const { stores } = ctx;
   ctx.response.body = {
     result: areaCache.delete(stores.id)

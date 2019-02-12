@@ -4,11 +4,28 @@ import { createEmptyMenuModel, updateMenuContainer } from './util';
 import { debugInteract } from '../../lib/debug';
 import { isExist, invariant, isTrue } from '../../lib/util';
 
-export const STORE_ID_PREIX = 'scm_';  // store context menu
+export const STORE_ID_PREIX = 'scm_'; // store context menu
 interface IPosition {
   x?: number;
   y?: number;
 }
+
+// 枚举被 store 控制的 model 的列表
+export const STORES_CONTROLLED_MODELS: string[] = ['menu'];
+
+
+// 获取被 store 控制的 key 的列表
+export type TStoresControlledKeys =
+  Exclude<keyof SnapshotOrInstance <typeof Stores>, 'id'>;
+
+export const STORES_CONTROLLED_KEYS: string[] = [
+  'menu',
+  'visible',
+  'width',
+  'left',
+  'top',
+];
+
 export const Stores = types
   .model('StoresModel', {
     id: types.refinement(

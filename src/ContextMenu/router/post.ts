@@ -1,9 +1,9 @@
 import Router from 'ette-router';
-import { areaCache } from './helper';
+import { areaCache, IContext } from './helper';
 export const router = new Router();
 
 // 创建新的菜单
-(router as any).post('menu', '/menu', function(ctx: any) {
+router.post('menu', '/menu', function(ctx: IContext) {
   const { stores, request } = ctx;
   const { menu } = request.data;
   stores.setMenu(menu);
@@ -11,7 +11,7 @@ export const router = new Router();
 });
 
 // 创建新的等待关闭区域
-(router as any).post('menu', '/menu/bufferAreas', function(ctx: any) {
+router.post('menu', '/menu/bufferAreas', function(ctx: IContext) {
   const { stores, request } = ctx;
   const { area } = request.data;
   areaCache.set(stores.id, {

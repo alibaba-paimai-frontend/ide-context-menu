@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
 import { observer } from 'mobx-react';
-import { StoresFactory, IStoresModel } from './schema/stores';
-import { AppFactory } from './controller/index';
 import { Menu, Icon } from 'antd';
+
+import {
+  StoresFactory,
+  IStoresModel,
+  TStoresControlledKeys,
+  STORES_CONTROLLED_KEYS,
+} from './schema/stores';
+import { AppFactory } from './controller/index';
 import { debugInteract } from '../lib/debug';
+import { pick } from '../lib/util';
 import { IMenuModel, IMenuObject, EMenuItemType } from './schema';
 import { MenuContainer, StyledMenu, StyledMenuItem } from './styles';
 
@@ -112,7 +119,7 @@ export class ContextMenu extends Component<IContextMenuProps> {
         left={left}
         top={top}
         ref={this.root}
-        className="contextMenu"
+        className="contextMenu-container"
       >
         {(visible || null) && (
           <MenuSubject width={width} menu={menu} onClickItem={onClickItem} />
@@ -125,23 +132,19 @@ export class ContextMenu extends Component<IContextMenuProps> {
 /* ----------------------------------------------------
     以下是专门配合 store 时的组件版本
 ----------------------------------------------------- */
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
 /**
  * 科里化创建 ContextMenuWithStore 组件
  * @param stores - store 模型实例
  */
 export const ContextMenuAddStore = (stores: IStoresModel) =>
-  observer(function ContextMenuWithStore(props: IContextMenuProps) {
-    return (
-      <ContextMenu
-        menu={stores.menu}
-        width={stores.width}
-        visible={stores.visible}
-        left={stores.left}
-        top={stores.top}
-        {...props}
-      />
-    );
+  observer(function ContextMenuWithStore(
+    props: Omit<IContextMenuProps, TStoresControlledKeys>
+  ) {
+    const { onClickItem, ...otherProps } = props;
+    const controlledProps = pick(stores, STORES_CONTROLLED_KEYS);
+    return <ContextMenu {...controlledProps} {...otherProps} />;
   });
 /**
  * 工厂函数，每调用一次就获取一副 MVC

@@ -1,6 +1,11 @@
 import { debugInteract } from '../../lib/debug';
 import { IStoresModel } from '../../index';
 
+export interface IContext {
+  stores: IStoresModel;
+  [propName: string]: any;
+}
+
 interface IArea {
   stores: IStoresModel;
   area: {
