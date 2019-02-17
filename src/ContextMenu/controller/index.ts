@@ -4,6 +4,8 @@ import { router as GetRouter } from '../router/get';
 import { router as PostRouter } from '../router/post';
 import { router as PutRouter } from '../router/put';
 import { router as DelRouter } from '../router/del';
+import { debugIO } from '../../lib/debug';
+
 
 
 export const AppFactory = function (stores: IStoresModel) {
@@ -11,9 +13,12 @@ export const AppFactory = function (stores: IStoresModel) {
     const app = new Application({ domain: 'context-menu' });
 
     // 挂载 stores 到上下文中
-    app.use((ctx: any, next)=>{
+    app.use(async (ctx: any, next)=>{
         ctx.stores = stores;
-        return next();
+        const originUrl = ctx.request.url;
+        debugIO(`[${stores.id}] request: ${JSON.stringify(ctx.request.toJSON())}`);
+        await next();
+        debugIO(`[${stores.id}] [${ctx.request.method}] ${originUrl} ==> response: ${JSON.stringify(ctx.response.toJSON())}`);
     });
 
     // 注册路由

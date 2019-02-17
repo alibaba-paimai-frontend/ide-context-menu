@@ -1,27 +1,29 @@
 import styled from 'styled-components';
 import { Menu } from 'antd';
+import { IContextMenuProps } from './index';
+
 
 const MenuItem = Menu.Item;
 
-interface IMenuContainer {
-  left?: number;
-  top?: number;
+interface IStyledProps extends IContextMenuProps {
+  style?: React.CSSProperties;
+  className?: string;
+  [prop: string]: any;
 }
 
-interface IStyledMenu {
-  width?: number;
-}
-
-export const MenuContainer = styled.div`
+export const MenuContainer = styled.div.attrs({
+  style: (props: IStyledProps) => props.style || {}  // 优先级会高一些，行内样式
+})`
+  display: ${(props: IStyledProps) => (props.visible ? 'block' : 'none')};
   position: fixed;
-  left: ${(props: IMenuContainer) => props.left || 0}px;
-  top: ${(props: IMenuContainer) => props.top || 0}px;
+  left: ${(props: IStyledProps) => props.left || 0}px;
+  top: ${(props: IStyledProps) => props.top || 0}px;
   background: white;
   box-shadow: 0px 2px 10px #999999;
 `;
 
 export const StyledMenu = styled(Menu)`
-  width: ${(props: IStyledMenu) => props.width || 200}px;
+  width: ${(props: IStyledProps) => props.width || 200}px;
 `;
 
 export const StyledMenuItem = styled(MenuItem)`

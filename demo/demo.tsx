@@ -1,6 +1,9 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { ContextMenu, IMenuObject } from '../src/';
+import { ContextMenu, IMenuObject, ContextMenuFactory } from '../src/';
+
+const { ContextMenuWithStore, client } = ContextMenuFactory();
+
 
 const menu: IMenuObject = {
   id: 'component-tree',
@@ -35,3 +38,13 @@ render(
   />,
   document.getElementById('example') as HTMLElement
 );
+
+//  ======== store ===========
+render(
+  <ContextMenuWithStore onClickItem={onClickItem} />,
+  document.getElementById('example-store') as HTMLElement
+);
+client.post('/menu', { menu: menu });
+client.put('/menu', { name: 'visible', value: true }); // 让菜单可见
+client.put('/menu', { name: 'top', value: 500 }); // 更改位置
+

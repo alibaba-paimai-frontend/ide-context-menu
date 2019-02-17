@@ -10,10 +10,9 @@
   "scripts": {
     "test": "./node_modules/.bin/jest",
     "build-storybook": "build-storybook -c .storybook",
-    "release": "standard-version",
+    "release": "npx standard-version",
     "dev": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "prepublish": "npm run build",
     "storybook": "start-storybook -p 9001 -c .storybook"
   },
   "keywords": [],
@@ -74,10 +73,10 @@
     "antd": "3.x",
     "mobx": "4.x",
     "mobx-react": "5.x",
+    "mobx-react-lite": "1.x",
     "mobx-state-tree": "3.x",
     "react": "16.x",
-    "react-dom": "16.x",
-    "ss-tree": "1.x",
-    "styled-components": "4.x"
+    "styled-components": "4.x.x",
+    "react-dom": "16.x"
   }
 }
