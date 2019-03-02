@@ -141,6 +141,15 @@ export const ContextMenu = ContextMenuHOC({
 ----------------------------------------------------- */
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 
+const onClickItemWithStore = (
+  stores: IStoresModel,
+  onClickItem: (key: string, keyPath: Array<string>, item: any) => void
+) => (key: string, keyPath: Array<string>, item: any) => {
+  stores.setSelectedKey(key);
+  onClickItem && onClickItem(key, keyPath, item);
+
+}
+
 /**
  * 科里化创建 ContextMenuWithStore 组件
  * @param stores - store 模型实例
@@ -151,7 +160,9 @@ export const ContextMenuAddStore = (stores: IStoresModel) => {
   ) => {
     const { onClickItem, ...otherProps } = props;
     const controlledProps = pick(stores, STORES_CONTROLLED_KEYS);
-    return <ContextMenu {...controlledProps} {...otherProps} />;
+    return <ContextMenu {...controlledProps} {...otherProps} onClickItem={
+      onClickItemWithStore(stores, onClickItem)
+    }/>;
   };
   ContextMenuWithStore.displayName = 'ContextMenuWithStore';
 

@@ -25,6 +25,9 @@ const menu: IMenuObject = {
 
 function onClickItem(key: string, keyPath: Array<string>, item: any) {
   console.log(`当前点击项的 id: ${key}`);
+  client.get('/selection').then(res=>{
+    console.log('get /selection:', res.body);
+  });
 }
 
 render(

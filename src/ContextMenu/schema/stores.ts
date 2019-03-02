@@ -1,4 +1,4 @@
-import { types, SnapshotOrInstance, Instance } from 'mobx-state-tree';
+import { types, SnapshotOrInstance, Instance, cast } from 'mobx-state-tree';
 import { MenuModel, IMenuModel } from './index';
 import { createEmptyMenuModel, updateMenuContainer } from './util';
 import { debugInteract } from '../../lib/debug';
@@ -30,6 +30,7 @@ export const Stores = types
       identifier => identifier.indexOf(STORE_ID_PREIX) === 0
     ),
     menu: MenuModel,
+    selectedKey: types.optional(types.string, ''), // 被点击的 item
     visible: false,
     width: types.optional(types.number, 200),
     left: types.optional(types.number, 0),
@@ -40,6 +41,9 @@ export const Stores = types
       setVisible(visible: boolean) {
         self.visible = isTrue(visible);
       },
+      setSelectedKey(sid: string = '') {
+        self.selectedKey = sid;
+      },
       setWidth(width: number) {
         self.width = +width;
       },
@@ -49,8 +53,8 @@ export const Stores = types
       setTop(y: number) {
         self.top = +y;
       },
-      setMenu(menu: IMenuModel) {
-        self.menu = menu;
+      setMenu(menu: SnapshotOrInstance<typeof self.menu>) {
+        self.menu = cast(menu);
       }
     };
   })
