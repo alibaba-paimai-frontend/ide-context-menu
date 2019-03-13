@@ -20,6 +20,7 @@ export const MenuContainer = styled.div.attrs({
   top: ${(props: IStyledProps) => props.top || 0}px;
   background: white;
   box-shadow: 0px 2px 10px #999999;
+  z-index: 9;
 `;
 
 export const StyledMenu = styled(Menu)`
