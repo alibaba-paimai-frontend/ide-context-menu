@@ -7,7 +7,7 @@ import mdDelNode from './del.md';
 import { ContextMenuFactory } from '../../../src';
 import { menuGen } from '../../helper';
 
-const { ContextMenuWithStore, client } = ContextMenuFactory();
+const { ComponentWithStore: ContextMenuWithStore, client } = ContextMenuFactory();
 
 function onClickItem(key, keyPath, item) {
   console.log(`当前点击项的 id: ${key}`);
@@ -42,7 +42,8 @@ function removeItemById() {
   client.del(`/items/${id}`).then(res => {
     const { status, body } = res;
     if (status === 200) {
-      const item = body.item || {};
+      const data = res && res.body && res.body.data || {};
+      const item = data.item || {};
       document.getElementById('info').innerText =
         `被删除 item 信息：\n` + JSON.stringify(item, null, 4);
       // 同时选中父节点
@@ -62,7 +63,7 @@ storiesOf('API - del', module)
             <Col span={20}>
               <Button onClick={removeItemById}>移除节点</Button>
               <Button onClick={resetMenu}>重置成空树</Button>
-              <Button onClick={createNew}>创建随机树</Button>
+              <Button onClick={createNew}>创建随机菜单</Button>
             </Col>
           </Row>
 

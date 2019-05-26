@@ -1,27 +1,35 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
+
+import { createModel } from 'ide-lib-engine';
+
 import { wInfo } from '../../.storybook/utils';
 
-import { ContextMenu, createMenuModel } from '../../src/';
+import { ContextMenu, ContextMenuModel } from '../../src/';
 import { menuNormalGen } from '../helper';
 
 import mdMobx from './simple-mobx.md';
 import mdPlain from './simple-plain.md';
 
 const menuNormal = menuNormalGen();
-const menuNormalModel = createMenuModel(menuNormal);
-
+const menuNormalModel = createModel(ContextMenuModel, {
+  visible: true,
+  menu: menuNormal,
+  left: 200, 
+  top: 100, 
+  width: 200
+});
+// console.log(444, menuNormalModel);
 function onClickItem(key, keyPath, item) {
   console.log(`当前点击项的 id: ${key}`);
 }
 
-const clickBtn = menu => () => {
-  const firstItem = menu.children[0];
-  if (firstItem.setName) {
-    firstItem.setName('hello2');
-  } else {
-    firstItem.name = 'hello';
-  }
+const clickBtn = () => {
+  menuNormal.name = 'hello';
+};
+
+const clickWithStore = () => {
+  menuNormalModel.menu.children[0].setName('hello');
 };
 
 storiesOf('基础使用', module)
@@ -29,14 +37,10 @@ storiesOf('基础使用', module)
   .addWithJSX('使用 mobx 对象', () => (
     <div>
       <ContextMenu
-        visible={true}
-        menu={menuNormalModel}
-        width={200}
-        left={400}
-        top={100}
+        {...menuNormalModel}
         onClickItem={onClickItem}
       />
-      <button onClick={clickBtn(menuNormalModel)}>
+      <button onClick={clickWithStore}>
         更换首个 item 的 name （会响应）
       </button>
     </div>
@@ -52,7 +56,7 @@ storiesOf('基础使用', module)
         top={100}
         onClickItem={onClickItem}
       />
-      <button onClick={clickBtn(menuNormal)}>
+      <button onClick={clickBtn}>
         更换首个 item 的 name （不会响应）
       </button>
     </div>

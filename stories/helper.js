@@ -35,7 +35,7 @@ export function menuGen() {
 
 export function menuNormalGen() {
   return {
-    id: 'component-tree',
+    id: 'component-tree-menu',
     name: '组件树右键菜单',
     children: [
       { id: 'newFile', name: '创建新页面', icon: 'file' },

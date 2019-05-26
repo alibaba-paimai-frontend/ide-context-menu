@@ -11,11 +11,11 @@ function onClickItem(key, keyPath, item) {
   console.log(`当前点击项的 id: ${key}`);
 }
 const {
-  ContextMenuWithStore: ContextMenuWithStore1,
+  ComponentWithStore: ContextMenuWithStore1,
   client: client1
 } = ContextMenuFactory();
 const {
-  ContextMenuWithStore: ContextMenuWithStore2,
+  ComponentWithStore: ContextMenuWithStore2,
   client: client2
 } = ContextMenuFactory();
 
@@ -32,7 +32,7 @@ const getInfo = client => () => {
   client.get('/items?filter=id,name').then(res => {
     const { status, body } = res;
     if (status === 200) {
-      items = body.items;
+      items = body.data.items;
     }
     document.getElementById('info').innerText = JSON.stringify(items, null, 4);
   });
@@ -49,7 +49,7 @@ const getById = client => () => {
   client.get(`/items/${id}`).then(res => {
     const { status, body } = res;
     if (status === 200) {
-      const item = body.item || {};
+      const item = body.data.item || {};
       document.getElementById('info').innerText = JSON.stringify(
         item.toJSON ? item.toJSON() : item,
         null,

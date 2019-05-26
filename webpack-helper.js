@@ -55,19 +55,26 @@ const COMMON_EXTERNALS = {
     amd: 'styled-components',
     root: 'styled'
   },
-  //   "ide-lib-utils": {
-  //   "commonjs": "ide-lib-utils",
-  //   "commonjs2": "ide-lib-utils",
-  //   "amd": "ide-lib-utils",
-  //   "root": "ideLibUtils"
-  // },
-  // "ide-lib-base-component": {
-  //   "commonjs": "ide-lib-base-component",
-  //   "commonjs2": "ide-lib-base-component",
-  //   "amd": "ide-lib-base-component",
-  //   "root": "ideBaseComponent"
-  // }
+  "ide-lib-utils": {
+    "commonjs": "ide-lib-utils",
+    "commonjs2": "ide-lib-utils",
+    "amd": "ide-lib-utils",
+    "root": "ideLibUtils"
+  },
+  "ide-lib-base-component": {
+    "commonjs": "ide-lib-base-component",
+    "commonjs2": "ide-lib-base-component",
+    "amd": "ide-lib-base-component",
+    "root": "ideBaseComponent"
+  },
+  "ide-lib-engine": {
+    "commonjs": "ide-lib-engine",
+    "commonjs2": "ide-lib-engine",
+    "amd": "ide-lib-engine",
+    "root": "ideLibEngine"
+  }
 };
+
 
 const ALL_EXTERNALS = Object.assign({}, COMMON_EXTERNALS, {
   'ss-tree': {
@@ -88,7 +95,7 @@ const COMMON_LIBS = Object.keys(COMMON_EXTERNALS);
 
 module.exports = {
   COMMON_EXTERNALS,
-  getExternal: function(extraLibs = [], directUse = false) {
+  getExternal: function (extraLibs = [], directUse = false) {
     const libs = COMMON_LIBS.concat(extraLibs);
     const externals = {};
     libs.forEach(lib => {

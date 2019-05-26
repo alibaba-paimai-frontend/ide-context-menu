@@ -7,7 +7,7 @@ import mdPutNode from './put.md';
 import { ContextMenuFactory } from '../../../src';
 import { menuGen } from '../../helper';
 
-const { ContextMenuWithStore, client } = ContextMenuFactory();
+const { ComponentWithStore: ContextMenuWithStore, client } = ContextMenuFactory();
 
 function onClickItem(key, keyPath, item) {
   console.log(`当前点击项的 id: ${key}`);
@@ -67,7 +67,7 @@ function updateById() {
         client.get(`/items/${id}`).then(res => {
           const { status, body } = res;
           if (status === 200) {
-            const item = body.item || {};
+            const item = body.data.item || {};
             document.getElementById('info').innerText =
               `更新操作：${isSuccess}; \n` +
               JSON.stringify(item.toJSON ? item.toJSON() : item, null, 4);

@@ -1,19 +1,17 @@
 import styled from 'styled-components';
-import { Menu } from 'antd';
+// import { desaturate } from 'polished';
+import { IBaseStyledProps } from 'ide-lib-base-component';
 import { IContextMenuProps } from './index';
-
+import { Menu } from 'antd';
 
 const MenuItem = Menu.Item;
 
-interface IStyledProps extends IContextMenuProps {
-  style?: React.CSSProperties;
-  className?: string;
-  [prop: string]: any;
-}
+interface IStyledProps extends IContextMenuProps, IBaseStyledProps {}
+
 
 export const MenuContainer = styled.div.attrs({
   style: (props: IStyledProps) => props.style || {}  // 优先级会高一些，行内样式
-})`
+})<IStyledProps>`
   display: ${(props: IStyledProps) => (props.visible ? 'block' : 'none')};
   position: fixed;
   left: ${(props: IStyledProps) => props.left || 0}px;
@@ -23,14 +21,3 @@ export const MenuContainer = styled.div.attrs({
   z-index: 9;
 `;
 
-export const StyledMenu = styled(Menu)`
-  width: ${(props: IStyledProps) => props.width || 200}px;
-`;
-
-export const StyledMenuItem = styled(MenuItem)`
-  .menuWrap & {
-    display: flex;
-    min-width: 160px;
-    justify-content: space-between;
-  }
-`;

@@ -1,16 +1,28 @@
-// import * as React from 'react';
-// import { render } from 'react-dom';
-// import Hello from './components/Hello';
+import { Instance } from 'mobx-state-tree';
+import { initSuitsFromConfig } from 'ide-lib-engine';
 
-// render(
-//   <Hello name="TypeScript" enthusiasmLevel={10} />,
-//   document.getElementById('example') as HTMLElement
-// );
-
-
+export * from './ContextMenu/config';
 export * from './ContextMenu/';
-export * from './ContextMenu/schema/';
-export * from './ContextMenu/schema/util';
-export * from './ContextMenu/schema/stores';
 
-export * from './ContextMenu/controller/';
+import { ContextMenuCurrying } from './ContextMenu/';
+import { configContextMenu } from './ContextMenu/config';
+
+const {
+    ComponentModel: ContextMenuModel,
+    StoresModel: ContextMenuStoresModel,
+    NormalComponent: ContextMenu,
+    ComponentHOC: ContextMenuHOC,
+    ComponentAddStore: ContextMenuAddStore,
+    ComponentFactory: ContextMenuFactory
+} = initSuitsFromConfig(ContextMenuCurrying,configContextMenu);
+
+export {
+    ContextMenuModel,
+    ContextMenuStoresModel,
+    ContextMenu,
+    ContextMenuHOC,
+    ContextMenuAddStore,
+    ContextMenuFactory
+};
+
+export interface IContextMenuModel extends Instance<typeof ContextMenuModel> { }
