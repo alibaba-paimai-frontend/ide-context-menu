@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+# [0.2.0](https://github.com/one-gourd/ide-context-menu/compare/v0.1.2...v0.2.0) (2019-05-26)
+
+
+### Bug Fixes
+
+* **样式: 菜单容器:** 调高菜单容器的 z-index ([4393744](https://github.com/one-gourd/ide-context-menu/commit/4393744))
+
+
+### Features
+
+* 🎸 架构升级: 采用 engine 架构 ([a2074a0](https://github.com/one-gourd/ide-context-menu/commit/a2074a0))
+
+
+
 <a name="0.1.2"></a>
 ## [0.1.2](https://github.com/alibaba-paimai-frontend/ide-context-menu/compare/v0.1.1...v0.1.2) (2019-03-08)
 
