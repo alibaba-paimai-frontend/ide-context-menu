@@ -19,7 +19,7 @@ export const modelExtends = (model: IAnyModelType) => {
              * @param position {x?,y?} 位置属性
              */
             setPostion(position: IPosition) {
-                if (!position) return;
+                if (!position) return false;
                 const { x, y } = position;
                 if (isExist(x)) {
                     self.setLeft(x);
@@ -27,6 +27,7 @@ export const modelExtends = (model: IAnyModelType) => {
                 if (isExist(y)) {
                     self.setTop(y);
                 }
+                return true;
             }
         };
     })

@@ -25,6 +25,15 @@ router.put('updateItemById', '/items/:id', function (ctx: IContext) {
   buildNormalResponse(ctx, 200, { success: isSuccess });
 });
 
+// 更新菜单位置
+router.put('updateMenuPosition', '/menu/position', function (ctx: IContext) {
+  const { stores, request } = ctx;
+  const { x, y} = request.data;
+  const origin = {x: stores.model.left, y: stores.model.top}
+  const isSuccess = stores.model.setPostion({x, y});
+  buildNormalResponse(ctx, 200, { success: isSuccess, origin });
+});
+
 
 // 更新 css 属性
 router.put('updateStyles', '/model/styles/:target', updateStylesMiddleware('model'));
