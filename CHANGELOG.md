@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.1](https://github.com/one-gourd/ide-context-menu/compare/v0.2.0...v0.2.1) (2019-05-28)
+
+
+### Features
+
+* 🎸 功能新增: 路由新增更新菜单位置 ([edec161](https://github.com/one-gourd/ide-context-menu/commit/edec161))
+
+
+
 # [0.2.0](https://github.com/one-gourd/ide-context-menu/compare/v0.1.2...v0.2.0) (2019-05-26)
 
 
