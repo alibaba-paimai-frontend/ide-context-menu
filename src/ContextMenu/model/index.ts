@@ -1,5 +1,5 @@
 import { IAnyModelType } from 'mobx-state-tree';
-import { capitalize, invariant, isExist } from 'ide-lib-utils';
+import { isExist } from 'ide-lib-utils';
 export * from './menu';
 
 import { MenuModel } from './menu';

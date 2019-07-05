@@ -3,7 +3,7 @@ import { BASE_CONTROLLED_KEYS } from 'ide-lib-base-component';
 
 import { IStoresModel, IModuleConfig } from 'ide-lib-engine';
 import { DEFAULT_PROPS, IContextMenuProps } from '.';
-import { selectItem } from './solution';
+import { selectItem, onChangeSize } from './solution';
 
 import { subComponents, ISubProps } from './subs';
 import { modelExtends, MenuModel } from './model';
@@ -17,14 +17,15 @@ export const configContextMenu: IModuleConfig<IContextMenuProps, ISubProps> = {
   component: {
     className: 'ContextMenu',
     solution: {
-      onClickItem: [selectItem]
+      onClickItem: [selectItem],
+      onCSizeChange: [onChangeSize]
     },
     defaultProps: DEFAULT_PROPS,
     children: subComponents
   },
   router: {
     domain: 'context-menu',
-    list: [GetRouter, PostRouter, PutRouter, DelRouter],
+    list: [GetRouter, PostRouter, PutRouter, DelRouter]
   },
   store: {
     idPrefix: 'scm'
@@ -35,7 +36,6 @@ export const configContextMenu: IModuleConfig<IContextMenuProps, ISubProps> = {
       menu: MenuModel,
       selectedKey: types.optional(types.string, ''), // 被点击的 item
       visible: types.optional(types.boolean, false),
-      width: types.optional(types.number, 200),
       left: types.optional(types.number, 0),
       top: types.optional(types.number, 0)
       // language: types.optional(
@@ -47,7 +47,7 @@ export const configContextMenu: IModuleConfig<IContextMenuProps, ISubProps> = {
       // 在 mst v3 中， `types.map` 默认值就是 `{}`
     },
     extends: modelExtends
-  },
+  }
 };
 
 // 枚举受 store 控制的 key，一般来自 config.model.props 中 key

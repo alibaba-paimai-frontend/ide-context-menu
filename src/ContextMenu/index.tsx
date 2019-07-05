@@ -1,17 +1,27 @@
-import React, { useCallback } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Button } from 'antd';
-import { IBaseTheme, IBaseComponentProps } from 'ide-lib-base-component';
+import {
+  IBaseTheme,
+  IBaseComponentProps,
+  IBaseComponentEvent,
+  useSizeChange
+} from 'ide-lib-base-component';
 
 import { TComponentCurrying } from 'ide-lib-engine';
 
-import { MenuSubject, IMenuSubjectEvent, IMenuSubjectProps} from './mods/MenuSubject';
+import {
+  MenuSubject,
+  IMenuSubjectEvent,
+  IMenuSubjectProps
+} from './mods/MenuSubject';
 import { MenuContainer } from './styles';
 import { ISubProps } from './subs';
 
-export * from './mods/MenuSubject'
+export * from './mods/MenuSubject';
 
-export interface IContextMenuEvent extends IMenuSubjectEvent {
-}
+export interface IContextMenuEvent
+  extends IMenuSubjectEvent,
+    IBaseComponentEvent {}
 
 // export interface IContextMenuStyles extends IBaseStyles {
 //   container?: React.CSSProperties;
@@ -21,7 +31,10 @@ export interface IContextMenuTheme extends IBaseTheme {
   main: string;
 }
 
-export interface IContextMenuProps extends IMenuSubjectProps, ISubProps, IBaseComponentProps {
+export interface IContextMenuProps
+  extends IMenuSubjectProps,
+    ISubProps,
+    IBaseComponentProps {
   /**
    * 是否展现
    */
@@ -38,8 +51,6 @@ export interface IContextMenuProps extends IMenuSubjectProps, ISubProps, IBaseCo
   top?: number;
 }
 
-
-
 export const DEFAULT_PROPS: IContextMenuProps = {
   menu: {
     id: 'root',
@@ -54,15 +65,29 @@ export const ContextMenuCurrying: TComponentCurrying<
   IContextMenuProps,
   ISubProps
 > = subComponents => props => {
-  const { 
-    menu, visible, width, left, top, onClickItem } = props;
-  
-    return <MenuContainer
+  const {
+    menu,
+    visible,
+    cWidth,
+    left,
+    top,
+    onClickItem,
+    onCSizeChange
+  } = props;
+
+  // 对容器注册尺寸响应回调
+  let refContainer = useRef(null);
+  useSizeChange(refContainer, onCSizeChange);
+
+  return (
+    <MenuContainer
+      ref={refContainer}
       visible={visible}
       left={left}
       top={top}
       className="context-menu-container"
     >
-      <MenuSubject width={width} menu={menu} onClickItem={onClickItem} />
+      <MenuSubject width={cWidth} menu={menu} onClickItem={onClickItem} />
     </MenuContainer>
+  );
 };

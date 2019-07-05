@@ -1,5 +1,9 @@
 import Router from 'ette-router';
-import { updateStylesMiddleware, updateThemeMiddleware, buildNormalResponse } from 'ide-lib-base-component';
+import {
+  updateStylesMiddleware,
+  updateThemeMiddleware,
+  buildNormalResponse
+} from 'ide-lib-base-component';
 
 import { IContext } from './helper';
 
@@ -13,11 +17,16 @@ router.put('updateMenu', '/menu', function(ctx: IContext) {
   const originValue = stores.model[name];
   const isSuccess = stores.model.updateAttribute(name, value);
 
-  buildNormalResponse(ctx, 200, { success: isSuccess, origin: originValue }, `属性 ${name} 的值从 ${originValue} -> ${value} 的变更: ${isSuccess}`);
+  buildNormalResponse(
+    ctx,
+    200,
+    { success: isSuccess, origin: originValue },
+    `属性 ${name} 的值从 ${originValue} -> ${value} 的变更: ${isSuccess}`
+  );
 });
 
 // 更新指定节点的属性
-router.put('updateItemById', '/items/:id', function (ctx: IContext) {
+router.put('updateItemById', '/items/:id', function(ctx: IContext) {
   const { stores, request } = ctx;
   const { name, value } = request.data;
   const { id } = ctx.params;
@@ -26,18 +35,36 @@ router.put('updateItemById', '/items/:id', function (ctx: IContext) {
 });
 
 // 更新菜单位置
-router.put('updateMenuPosition', '/menu/position', function (ctx: IContext) {
+router.put('updateMenuPosition', '/menu/position', function(ctx: IContext) {
   const { stores, request } = ctx;
-  const { x, y} = request.data;
-  const origin = {x: stores.model.left, y: stores.model.top}
-  const isSuccess = stores.model.setPostion({x, y});
+  const { x, y } = request.data;
+  const origin = { x: stores.model.left, y: stores.model.top };
+  const isSuccess = stores.model.setPostion({ x, y });
   buildNormalResponse(ctx, 200, { success: isSuccess, origin });
 });
 
+// 更新菜单尺寸
+router.put('updateCSize', '/csize', function(ctx: IContext) {
+  const { stores, request } = ctx;
+  const { width, height } = request.data;
+  const origin = { width: stores.model.cWidth, height: stores.model.cHeight };
+  stores.model.setCWidth(width);
+  stores.model.setCHeight(height);
+  buildNormalResponse(ctx, 200, { success: true, origin });
+});
+
+
 
 // 更新 css 属性
-router.put('updateStyles', '/model/styles/:target', updateStylesMiddleware('model'));
-
+router.put(
+  'updateStyles',
+  '/model/styles/:target',
+  updateStylesMiddleware('model')
+);
 
 // 更新 theme 属性
-router.put('updateTheme', '/model/theme/:target', updateThemeMiddleware('model'));
+router.put(
+  'updateTheme',
+  '/model/theme/:target',
+  updateThemeMiddleware('model')
+);

@@ -45,7 +45,7 @@ export interface IMenuSubjectProps extends IMenuSubjectEvent {
     /**
      * 菜单宽度
      */
-    width?: number;
+    width?: number | string;
 }
 
 

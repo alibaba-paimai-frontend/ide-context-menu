@@ -1,11 +1,18 @@
 import * as React from 'react';
 import { render } from 'react-dom';
-import { ContextMenu, ContextMenuFactory, IMenuObject, IContextMenuProps } from '../src/';
+import {
+  ContextMenu,
+  ContextMenuFactory,
+  IMenuObject,
+  IContextMenuProps
+} from '../src/';
 import { Collapse } from 'antd';
 const Panel = Collapse.Panel;
 
-const { ComponentWithStore: ContextMenuWithStore, client } = ContextMenuFactory();
-
+const {
+  ComponentWithStore: ContextMenuWithStore,
+  client
+} = ContextMenuFactory();
 
 const menu: IMenuObject = {
   id: 'component-tree',
@@ -13,7 +20,13 @@ const menu: IMenuObject = {
   children: [
     { id: 'newFile', name: '创建新页面', icon: 'file' },
     { id: 'copy', name: '复制', icon: 'copy', shortcut: '⌘+C' },
-    { id: 'paste', name: '粘贴', icon: 'switcher', shortcut: '⌘+V', disabled: true },
+    {
+      id: 'paste',
+      name: '粘贴',
+      icon: 'switcher',
+      shortcut: '⌘+V',
+      disabled: true
+    },
     {
       id: 'divider',
       name: '分割线',
@@ -21,7 +34,7 @@ const menu: IMenuObject = {
       type: 'separator'
     },
     { id: 'preview', name: '预览', icon: 'eye' },
-    { id: 'delete', name: '删除', icon: 'delete', shortcut: '⌘+Delete' },
+    { id: 'delete', name: '删除', icon: 'delete', shortcut: '⌘+Delete' }
   ]
 };
 
@@ -38,7 +51,7 @@ render(
       <ContextMenu
         visible={true}
         menu={menu}
-        width={200}
+        cWidth={200}
         left={100}
         top={100}
         onClickItem={onClickItem}
@@ -62,3 +75,8 @@ client.post('/menu', { menu: menu });
 client.put('/menu', { name: 'visible', value: true }); // 让菜单可见
 client.put('/menu', { name: 'top', value: 500 }); // 更改位置
 
+setTimeout(() => {
+  client.get('/csize').then(res => {
+    console.log('menu size:', res.body.data);
+  });
+}, 2000);
