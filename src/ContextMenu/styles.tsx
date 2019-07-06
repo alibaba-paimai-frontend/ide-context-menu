@@ -8,16 +8,15 @@ const MenuItem = Menu.Item;
 
 interface IStyledProps extends IContextMenuProps, IBaseStyledProps {}
 
-
 export const MenuContainer = styled.div.attrs({
-  style: (props: IStyledProps) => props.style || {}  // 优先级会高一些，行内样式
+  style: (props: IStyledProps) => props.style || {} // 优先级会高一些，行内样式
 })<IStyledProps>`
-  display: ${(props: IStyledProps) => (props.visible ? 'block' : 'none')};
+  display: block;
   position: fixed;
-  left: ${(props: IStyledProps) => props.left || 0}px;
+  left: ${(props: IStyledProps) =>
+    props.visible ? props.left || 0 : -10000}px;
   top: ${(props: IStyledProps) => props.top || 0}px;
   background: white;
   box-shadow: 0px 2px 10px #999999;
   z-index: 9;
 `;
-

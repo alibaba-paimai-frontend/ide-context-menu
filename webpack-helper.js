@@ -102,15 +102,15 @@ const ALIAS_LIBS = [
 
 module.exports = {
   COMMON_EXTERNALS,
-  getExternal: function(extraLibs = [], directUse = false, isDev = true) {
+  getExternal: function(extraLibs = [], isProduction = false) {
     const libs = COMMON_LIBS.concat(extraLibs);
     const externals = {};
     libs.forEach(lib => {
       // 如果是 dev 状态，优先使用 alias 配置而不是 externals
-      if (isDev && !!~ALIAS_LIBS.indexOf(lib)) {
+      if (!isProduction && !!~ALIAS_LIBS.indexOf(lib)) {
         console.log(`依赖库 "${lib}" 优先使用 alias 配置`);
       } else {
-        externals[lib] = directUse
+        externals[lib] = isProduction
           ? ALL_EXTERNALS[lib]
           : (ALL_EXTERNALS[lib] && ALL_EXTERNALS[lib].root) || lib;
       }

@@ -72,11 +72,18 @@ client.post('/model', {
 });
 
 client.post('/menu', { menu: menu });
-client.put('/menu', { name: 'visible', value: true }); // 让菜单可见
+client.put('/menu', { name: 'visible', value: false }); // 让菜单可见
 client.put('/menu', { name: 'top', value: 500 }); // 更改位置
 
 setTimeout(() => {
-  client.get('/csize').then(res => {
-    console.log('menu size:', res.body.data);
-  });
-}, 2000);
+  client.put('/menu', { name: 'visible', value: true }).then(() => {
+    client.get('/csize').then(res => {
+      console.log('menu size:', res.body.data);
+    });
+    // 自动变更 position 位置
+    client.put('/menu/position', {
+      x: 300,
+      y: 800,
+    });
+  }); // 让菜单可见
+}, 1000);

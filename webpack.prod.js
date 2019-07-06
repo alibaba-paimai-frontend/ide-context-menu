@@ -16,7 +16,7 @@ module.exports = common.map(config => {
   */
   return merge(config, {
     entry: './src/index.tsx',
-    externals: getExternal([], true, false),
+    externals: getExternal([], true),
     mode: 'production',
     devtool: 'source-map',
     optimization: {
