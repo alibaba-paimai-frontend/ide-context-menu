@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.2](https://github.com/one-gourd/ide-context-menu/compare/v0.2.1...v0.2.2) (2019-07-15)
+
+
+### Bug Fixes
+
+* 🐛 右键菜单位置：修复菜单溢出窗口的问题 ([2eb6da1](https://github.com/one-gourd/ide-context-menu/commit/2eb6da1))
+
+
+### Features
+
+* 🎸 功能完善: 使用 cWidth 和 useCSizeChange 获取菜单项的宽高尺寸 ([9303bd3](https://github.com/one-gourd/ide-context-menu/commit/9303bd3))
+
+
+
 ## [0.2.1](https://github.com/one-gourd/ide-context-menu/compare/v0.2.0...v0.2.1) (2019-05-28)
 
 
